@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.javademo.mapper.MarketDataMapper">
+    
+    <resultMap id="BaseResultMap" type="com.demo.javademo.entity.MarketData">
+        <id column="id" property="id" />
+        <result column="source" property="source" />
+        <result column="district" property="district" />
+        <result column="price" property="price" />
+        <result column="area" property="area" />
+        <result column="type" property="type" />
+        <result column="collection_time" property="collectionTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="findLastTwoMonthsData" resultMap="BaseResultMap">
+        SELECT AVG(price) as price, DATE_FORMAT(collection_time, '%Y-%m') as month
+        FROM market_data
+        WHERE collection_time >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)
+        GROUP BY DATE_FORMAT(collection_time, '%Y-%m')
+        ORDER BY month DESC
+        LIMIT 2
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO market_data (source, district, price, area, type, collection_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.source}, #{item.district}, #{item.price}, #{item.area}, 
+             #{item.type}, #{item.collectionTime})
+        </foreach>
+    </insert>
+</mapper> 

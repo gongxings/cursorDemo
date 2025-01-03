@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.javademo.mapper.HouseMapper">
+    
+    <resultMap id="BaseResultMap" type="com.demo.javademo.entity.House">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="address" property="address" />
+        <result column="district" property="district" />
+        <result column="price" property="price" />
+        <result column="area" property="area" />
+        <result column="room_count" property="roomCount" />
+        <result column="floor" property="floor" />
+        <result column="total_floor" property="totalFloor" />
+        <result column="build_year" property="buildYear" />
+        <result column="type" property="type" />
+        <result column="status" property="status" />
+        <result column="features" property="features" />
+        <result column="facilities" property="facilities" />
+        <result column="description" property="description" />
+        <result column="creator_id" property="creatorId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, title, address, district, price, area, room_count, floor, total_floor,
+        build_year, type, status, features, facilities, description, creator_id,
+        create_time, update_time
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM house
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM house
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByDistrict" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM house
+        WHERE district = #{district}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="search" parameterType="com.demo.javademo.entity.House" resultType="com.demo.javademo.entity.House">
+        SELECT * FROM house
+        <where>
+            <if test="district != null and district != ''">
+                AND district = #{district}
+            </if>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="roomCount != null">
+                AND room_count = #{roomCount}
+            </if>
+            <if test="minPrice != null">
+                AND price >= #{minPrice}
+            </if>
+            <if test="maxPrice != null">
+                AND price &lt;= #{maxPrice}
+            </if>
+            <if test="minArea != null">
+                AND area >= #{minArea}
+            </if>
+            <if test="maxArea != null">
+                AND area &lt;= #{maxArea}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.demo.javademo.entity.House" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO house (
+            title, address, district, price, area, room_count, floor, total_floor,
+            build_year, type, status, features, facilities, description, creator_id
+        )
+        VALUES (
+            #{title}, #{address}, #{district}, #{price}, #{area}, #{roomCount},
+            #{floor}, #{totalFloor}, #{buildYear}, #{type}, #{status},
+            #{features}, #{facilities}, #{description}, #{creatorId}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.demo.javademo.entity.House">
+        UPDATE house
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="roomCount != null">room_count = #{roomCount},</if>
+            <if test="floor != null">floor = #{floor},</if>
+            <if test="totalFloor != null">total_floor = #{totalFloor},</if>
+            <if test="buildYear != null">build_year = #{buildYear},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="facilities != null">facilities = #{facilities},</if>
+            <if test="description != null">description = #{description},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM house WHERE id = #{id}
+    </delete>
+</mapper> 

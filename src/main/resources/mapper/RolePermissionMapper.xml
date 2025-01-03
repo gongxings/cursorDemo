@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.javademo.mapper.RolePermissionMapper">
+    
+    <select id="findPermissionsByRole" resultType="string">
+        SELECT permission
+        FROM role_permission
+        WHERE role = #{role}
+    </select>
+
+    <insert id="insertRolePermission">
+        INSERT INTO role_permission (role, permission)
+        VALUES (#{role}, #{permission})
+    </insert>
+
+    <delete id="deleteRolePermission">
+        DELETE FROM role_permission
+        WHERE role = #{role} AND permission = #{permission}
+    </delete>
+</mapper> 
