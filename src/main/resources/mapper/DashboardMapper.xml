@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.javademo.mapper.DashboardMapper">
+    
+    <select id="countTotalHouses" resultType="long">
+        SELECT COUNT(*) FROM house
+    </select>
+    
+    <select id="countTodayNewHouses" resultType="long">
+        SELECT COUNT(*) FROM house 
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+    
+    <select id="countTotalUsers" resultType="long">
+        SELECT COUNT(*) FROM user
+    </select>
+    
+    <select id="countActiveUsers" resultType="long">
+        SELECT COUNT(*) FROM user 
+        WHERE status = 1
+    </select>
+    
+    <select id="calculateAvgPrice" resultType="decimal">
+        SELECT COALESCE(AVG(price), 0) FROM house
+    </select>
+    
+    <select id="calculateAvgArea" resultType="decimal">
+        SELECT COALESCE(AVG(area), 0) FROM house
+    </select>
+    
+    <select id="calculatePricePerSquare" resultType="decimal">
+        SELECT COALESCE(AVG(price/area), 0) FROM house
+    </select>
+    
+    <select id="getDistrictDistribution" resultType="map">
+        SELECT 
+            district as name,
+            COUNT(*) as value
+        FROM house 
+        GROUP BY district
+    </select>
+    
+    <select id="getRoomTypeDistribution" resultType="map">
+        SELECT 
+            room_count as name,
+            COUNT(*) as value
+        FROM house 
+        GROUP BY room_count
+    </select>
+    
+    <select id="getPriceTrend" resultType="map">
+        SELECT 
+            DATE(create_time) as date,
+            AVG(price) as avgPrice
+        FROM house 
+        WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY DATE(create_time)
+        ORDER BY date
+    </select>
+</mapper> 

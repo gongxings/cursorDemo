@@ -1,20 +1,18 @@
 import request from './request';
 
-export interface LoginData {
+export interface LoginForm {
   username: string;
   password: string;
 }
 
-export interface UserInfo {
-  id: number;
-  username: string;
-  role: string;
-  email?: string;
-  phone?: string;
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  token: string;
 }
 
-export function login(data: LoginData) {
-  return request({
+export function login(data: LoginForm) {
+  return request<LoginResponse>({
     url: '/auth/login',
     method: 'post',
     data

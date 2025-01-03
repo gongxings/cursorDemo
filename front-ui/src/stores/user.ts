@@ -1,54 +1,62 @@
 import { defineStore } from 'pinia';
 import { login, getUserInfo, logout } from '@/api/user';
-import type { LoginData, UserInfo } from '@/api/user';
+import { ref } from 'vue';
 
-interface UserState {
-  token: string;
-  userInfo: UserInfo | null;
-}
+export const useUserStore = defineStore('user', () => {
+  const token = ref('');
+  const userInfo = ref<any>(null);
 
-export const useUserStore = defineStore('user', {
-  state: (): UserState => ({
-    token: localStorage.getItem('token') || '',
-    userInfo: null
-  }),
-  
-  getters: {
-    username: state => state.userInfo?.username,
-    role: state => state.userInfo?.role
-  },
-  
-  actions: {
-    async login(loginData: LoginData) {
-      try {
-        const { data } = await login(loginData);
-        this.token = data.token;
-        localStorage.setItem('token', data.token);
-        return data;
-      } catch (error) {
-        throw error;
+  // 登录
+  async function loginAction(loginForm: { username: string; password: string }) {
+    try {
+      const res = await login(loginForm);
+      if (res.success && res.token) {
+        token.value = res.token;
+        return res;
       }
-    },
-    
-    async getInfo() {
-      try {
-        const { data } = await getUserInfo();
-        this.userInfo = data;
-        return data;
-      } catch (error) {
-        throw error;
-      }
-    },
-    
-    async logout() {
-      try {
-        await logout();
-        this.token = '';
-        this.userInfo = null;
-        localStorage.removeItem('token');
-      } catch (error) {
-        throw error;
-      }
+      throw new Error(res.message || '登录失败');
+    } catch (error) {
+      throw error;
     }
   }
+
+  // 获取用户信息
+  async function getUserInfoAction() {
+    try {
+      const res = await getUserInfo();
+      if (res.success) {
+        userInfo.value = res.data;
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 登出
+  async function logoutAction() {
+    try {
+      await logout();
+      resetState();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 重置状态
+  function resetState() {
+    token.value = '';
+    userInfo.value = null;
+  }
+
+  return {
+    token,
+    userInfo,
+    loginAction,
+    getUserInfoAction,
+    logoutAction,
+    resetState
+  };
+}, {
+  persist: true // 启用持久化存储
 }); 

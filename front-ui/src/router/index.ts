@@ -3,6 +3,19 @@ import Layout from '@/layout/index.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/',
+    redirect: '/dashboard'
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/dashboard/index.vue'),
+    meta: {
+      title: '首页',
+      icon: 'House'
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
@@ -76,8 +89,34 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
+});
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  
+  // 设置页面标题
+  document.title = `${to.meta.title || '房产管理系统'}`;
+  
+  // 如果是登录页面，直接放行
+  if (to.path === '/login') {
+    if (token) {
+      next('/dashboard');
+    } else {
+      next();
+    }
+    return;
+  }
+  
+  // 其他页面检查是否有token
+  if (!token) {
+    next('/login');
+    return;
+  }
+  
+  next();
 });
 
 export default router; 
