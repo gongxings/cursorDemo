@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'add',
         name: 'HouseAdd',
         component: () => import('@/views/house/form.vue'),
-        meta: { title: '添加房源' }
+        meta: { title: '添加房源' ,hidden: true}
       },
       {
         path: 'edit/:id',

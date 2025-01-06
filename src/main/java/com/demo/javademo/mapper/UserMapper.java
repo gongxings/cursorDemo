@@ -15,13 +15,9 @@ public interface UserMapper {
     
     int update(User user);
     
+    int delete(@Param("id") Long id);
+    
     List<User> findAll();
     
-    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
-    
     int updatePassword(@Param("id") Long id, @Param("password") String password);
-    
-    int insertToken(@Param("userId") Long userId, @Param("token") String token);
-    
-    int deleteToken(@Param("token") String token);
 } 
