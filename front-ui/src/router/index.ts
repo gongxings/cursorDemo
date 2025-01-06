@@ -27,22 +27,27 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: '房源管理', icon: 'Office' },
     children: [
       {
-        path: '/house/list',
+        path: 'list',
         name: 'HouseList',
         component: () => import('@/views/house/list.vue'),
         meta: { title: '房源列表' }
       },
       {
-        path: '/house/add',
+        path: 'add',
         name: 'HouseAdd',
         component: () => import('@/views/house/form.vue'),
         meta: { title: '添加房源' }
       },
       {
-        path: '/house/edit/:id',
+        path: 'edit/:id',
         name: 'HouseEdit',
         component: () => import('@/views/house/form.vue'),
         meta: { title: '编辑房源', hidden: true }
+      },{
+        path: 'view/:id',
+        name: 'HouseView',
+        component: () => import('@/views/house/view.vue'),
+        meta: { title: '查看房源', hidden: true }
       }
     ]
   },
@@ -52,22 +57,72 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: '数据分析', icon: 'DataLine' },
     children: [
       {
-        path: '/analysis/market',
+        path: 'market',
         name: 'MarketAnalysis',
         component: () => import('@/views/analysis/market.vue'),
         meta: { title: '市场分析' }
       },
       {
-        path: '/analysis/price',
+        path: 'price',
         name: 'PriceAnalysis',
         component: () => import('@/views/analysis/price.vue'),
         meta: { title: '价格分析' }
       },
       {
-        path: '/analysis/reports',
+        path: 'reports',
         name: 'Reports',
         component: () => import('@/views/analysis/reports.vue'),
         meta: { title: '分析报告' }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    meta: { title: '用户管理', icon: 'User' },
+    children: [
+      {
+        path: 'list',
+        name: 'UserList',
+        component: () => import('@/views/user/list.vue'),
+        meta: { title: '用户列表' }
+      },
+      {
+        path: 'add',
+        name: 'UserAdd',
+        component: () => import('@/views/user/form.vue'),
+        meta: { title: '添加用户', hidden: true }
+      },
+      {
+        path: 'edit/:id',
+        name: 'UserEdit',
+        component: () => import('@/views/user/form.vue'),
+        meta: { title: '编辑用户', hidden: true }
+      }
+    ]
+  },
+  {
+    path: '/region',
+    component: Layout,
+    meta: { title: '区域管理', icon: 'Location' },
+    children: [
+      {
+        path: 'list',
+        name: 'RegionList',
+        component: () => import('@/views/region/list.vue'),
+        meta: { title: '区域列表' }
+      },
+      {
+        path: 'add',
+        name: 'RegionAdd',
+        component: () => import('@/views/region/form.vue'),
+        meta: { title: '添加区域', hidden: true }
+      },
+      {
+        path: 'edit/:id',
+        name: 'RegionEdit',
+        component: () => import('@/views/region/form.vue'),
+        meta: { title: '编辑区域', hidden: true }
       }
     ]
   }

@@ -1,63 +1,29 @@
 import { defineStore } from 'pinia';
-import { login, getUserInfo, logout } from '@/api/user';
-import { ref } from 'vue';
+import { logout } from '@/api/user';
+import { ElMessage } from 'element-plus';
+import router from '@/router';
 
-export const useUserStore = defineStore('user', () => {
-  const token = ref('');
-  const userInfo = ref<any>(null);
-
-  // 登录
-  async function loginAction(loginForm: { username: string; password: string }) {
-    try {
-      const res = await login(loginForm);
-      if (res.data.success && res.data.token) {
-        token.value = res.data.token;
-        localStorage.setItem('token', res.data.token);
-        return res.data;
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    token: localStorage.getItem('token') || '',
+    userInfo: null
+  }),
+  actions: {
+    async logoutAction() {
+      try {
+        await logout();
+        this.resetState();
+        router.push('/login');
+        ElMessage.success('退出登录成功');
+      } catch (error) {
+        console.error('退出登录失败:', error);
+        ElMessage.error('退出登录失败');
       }
-      throw new Error(res.data.message || '登录失败');
-    } catch (error) {
-      throw error;
+    },
+    resetState() {
+      this.token = '';
+      this.userInfo = null;
+      localStorage.removeItem('token');
     }
   }
-
-  // 获取用户信息
-  async function getUserInfoAction() {
-    try {
-      const res = await getUserInfo();
-      if (res.data.success) {
-        userInfo.value = res.data.data;
-      }
-      return res.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  // 登出
-  async function logoutAction() {
-    try {
-      await logout();
-      resetState();
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  // 重置状态
-  function resetState() {
-    token.value = '';
-    userInfo.value = null;
-  }
-
-  return {
-    token,
-    userInfo,
-    loginAction,
-    getUserInfoAction,
-    logoutAction,
-    resetState
-  };
-}, {
-  persist: true // 启用持久化存储
 }); 

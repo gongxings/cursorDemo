@@ -10,7 +10,7 @@
         active-text-color="#409EFF"
         :router="true"
       >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" />
+        <sidebar-item v-for="route in routes" :key="route.path" :item="route" base-path="/" />
       </el-menu>
     </div>
 
@@ -71,7 +71,6 @@ const handleLogout = () => {
     type: 'warning'
   }).then(async () => {
     await userStore.logoutAction();
-    router.push('/login');
   });
 };
 </script>

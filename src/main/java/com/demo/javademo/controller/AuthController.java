@@ -5,6 +5,7 @@ import com.demo.javademo.dto.LoginResponse;
 import com.demo.javademo.dto.UserInfoResponse;
 import com.demo.javademo.service.UserService;
 import com.demo.javademo.common.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,7 +28,7 @@ public class AuthController {
         if (response.isSuccess()) {
             return ResponseEntity.ok(Result.success(response.getMessage(), response));
         } else {
-            return ResponseEntity.ok(Result.error(response.getMessage()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Result.error(response.getMessage()));
         }
     }
 
@@ -34,5 +36,15 @@ public class AuthController {
     public Result<UserInfoResponse> getUserInfo() {
         UserInfoResponse userInfo = userService.getCurrentUserInfo();
         return Result.success(userInfo);
+    }
+
+    @PostMapping("/logout")
+    public Result<?> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            userService.invalidateToken(token);
+        }
+        return Result.success("退出登录成功");
     }
 } 

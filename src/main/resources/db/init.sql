@@ -104,4 +104,22 @@ INSERT INTO `role_permission` (`role`, `permission`) VALUES
 
 -- 初始化管理员账号 (密码: password)
 INSERT INTO `user` (`username`, `password`, `role`, `email`, `status`) VALUES
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt2s7LC', 'ADMIN', 'admin@example.com', 1); 
+('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt2s7LC', 'ADMIN', 'admin@example.com', 1);
+
+
+INSERT INTO house (title, address, district, price, area, room_count, floor, total_floor, build_year, type, status, features, facilities, description, creator_id, create_time, update_time)
+VALUES
+    ('豪华公寓', '北京市朝阳区望京街道', '朝阳区', 12000000, 120, 3, 5, 20, '2015', '公寓', '在售', '["阳光充足", "交通便利"]', '["电梯", "停车位"]', '位于市中心，交通便利，周边设施齐全。', 1, NOW(), NOW()),
+    ('现代别墅', '上海市浦东新区陆家嘴', '浦东新区', 30000000, 300, 2, 2, 10, '2010', '别墅', '在售', '["花园", "游泳池"]', '["车库", "健身房"]', '豪华别墅，配备私人花园和游泳池。', 2, NOW(), NOW()),
+    ('经济型住宅', '广州市天河区天河北路', '天河区', 800000, 80, 8, 20, 15, '2005', '住宅', '已售', '["采光好"]', '["公共停车场"]', '经济实惠，适合刚需购房者。', 3, NOW(), NOW()),
+    ('海景房', '深圳市南山区蛇口', '南山区', 15000000, 150, 10, 30, 5, '2018', '公寓', '在售', '["海景", "高层"]', '["游泳池", "健身房"]', '高层海景房，视野开阔，设施齐全。', 4, NOW(), NOW()),
+    ('学区房', '杭州市西湖区文三路', '西湖区', 2000000, 100, 5, 10, 8, '2012', '住宅', '在售', '["学区房"]', '["停车位"]', '靠近名校，适合家庭居住。', 5, NOW(), NOW());
+
+
+CREATE TABLE UserToken (
+                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                           userId BIGINT NOT NULL,
+                           token VARCHAR(255) NOT NULL,
+                           createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           FOREIGN KEY (userId) REFERENCES User(id)
+);

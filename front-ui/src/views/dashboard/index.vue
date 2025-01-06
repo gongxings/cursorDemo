@@ -10,8 +10,8 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="number">{{ dashboardData.totalHouses }}</div>
-            <div class="sub-text">今日新增: {{ dashboardData.todayNewHouses }}</div>
+            <div class="number">{{ formatNumber(dashboardData.totalHouses) }}</div>
+            <div class="sub-text">今日新增: {{ formatNumber(dashboardData.todayNewHouses) }}</div>
           </div>
         </el-card>
       </el-col>
@@ -23,8 +23,8 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="number">{{ dashboardData.totalUsers }}</div>
-            <div class="sub-text">活跃用户: {{ dashboardData.activeUsers }}</div>
+            <div class="number">{{ formatNumber(dashboardData.totalUsers) }}</div>
+            <div class="sub-text">活跃用户: {{ formatNumber(dashboardData.activeUsers) }}</div>
           </div>
         </el-card>
       </el-col>
@@ -36,8 +36,8 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="number">{{ dashboardData.avgPrice }}元/月</div>
-            <div class="sub-text">{{ dashboardData.pricePerSquare }}元/㎡</div>
+            <div class="number">{{ formatNumber(dashboardData.avgPrice) }}元/月</div>
+            <div class="sub-text">{{ formatNumber(dashboardData.pricePerSquare) }}元/㎡</div>
           </div>
         </el-card>
       </el-col>
@@ -49,7 +49,7 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="number">{{ dashboardData.avgArea }}㎡</div>
+            <div class="number">{{ formatNumber(dashboardData.avgArea) }}㎡</div>
           </div>
         </el-card>
       </el-col>
@@ -121,6 +121,14 @@ const dashboardData = reactive({
   roomTypeDistribution: [],
   priceTrend: []
 });
+
+// 格式化数字
+const formatNumber = (value: number) => {
+  if (value >= 10000) {
+    return `${(value / 10000).toFixed(2)}万`;
+  }
+  return new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 }).format(value);
+};
 
 // 初始化图表
 const initCharts = () => {

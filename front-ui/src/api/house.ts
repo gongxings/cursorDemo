@@ -21,7 +21,7 @@ export interface HouseData {
   roomCount: number;
   floor: number;
   totalFloor: number;
-  buildYear?: number;
+  buildYear?: string;
   type: string;
   status?: string;
   features?: string[];

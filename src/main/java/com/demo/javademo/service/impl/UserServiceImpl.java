@@ -52,6 +52,10 @@ public class UserServiceImpl implements UserService {
             // 使用 JWT 生成 token
             String token = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
             
+            // 将 token 插入到 UserToken 表中
+            User user = userMapper.findByUsername(loginRequest.getUsername());
+            userMapper.insertToken(user.getId(), token);
+            
             return LoginResponse.builder()
                     .success(true)
                     .message("登录成功")
@@ -155,5 +159,33 @@ public class UserServiceImpl implements UserService {
                 .avatar("https://avatars.githubusercontent.com/u/1")  // 这里可以是实际的头像URL
                 .email(currentUser.getEmail())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void updateRole(Long userId, String role) {
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        user.setRole(role);
+        userMapper.update(user);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(Long userId, String newPassword) {
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userMapper.update(user);
+    }
+
+    @Override
+    public void invalidateToken(String token) {
+        // 从 UserToken 表中删除 token
+        userMapper.deleteToken(token);
     }
 } 

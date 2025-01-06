@@ -50,6 +50,16 @@
       <el-button type="primary" @click="handleAdd">
         <el-icon><Plus /></el-icon>添加房源
       </el-button>
+      <el-upload
+        action="/api/houses/import"
+        accept=".csv, .xlsx"
+        :on-success="handleImportSuccess"
+        :show-file-list="false"
+      >
+        <el-button type="primary">
+          <el-icon><Upload /></el-icon>导入房源
+        </el-button>
+      </el-upload>
     </div>
 
     <!-- 房源列表 -->
@@ -84,11 +94,11 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
-          <template #default="{ row }">
-            <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-            <el-button link type="primary" @click="handleView(row)">查看</el-button>
-            <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
+        <el-table-column label="操作" width="200">
+          <template #default="scope">
+            <el-button type="text" size="small" @click="handleView(scope.row)">查看</el-button>
+            <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -113,7 +123,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+import { Plus, Upload } from '@element-plus/icons-vue';
 import { getHouseList, searchHouses, deleteHouse } from '@/api/house';
 import type { HouseData, HouseQuery } from '@/api/house';
 
@@ -198,8 +208,7 @@ const handleEdit = (row: HouseData) => {
 
 // 查看房源
 const handleView = (row: HouseData) => {
-  // TODO: 实现查看详情功能
-  console.log('查看房源:', row);
+  router.push(`/house/view/${row.id}`);
 };
 
 // 删除房源
@@ -231,6 +240,11 @@ const handleCurrentChange = (val: number) => {
   fetchHouseList();
 };
 
+const handleImportSuccess = () => {
+  ElMessage.success('房源导入成功');
+  fetchHouseList(); // 重新获取房源列表
+};
+
 onMounted(() => {
   fetchHouseList();
 });
@@ -243,8 +257,11 @@ onMounted(() => {
   }
 
   .operation-bar {
-    margin-bottom: 20px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 10px; // 调整按钮之间的间距
+  margin-bottom: 20px;
+}
 
   .pagination {
     margin-top: 20px;

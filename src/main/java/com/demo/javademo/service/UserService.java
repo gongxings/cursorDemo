@@ -23,4 +23,7 @@ public interface UserService {
     List<User> findAllUsers();
     
     boolean updateUserStatus(Long userId, Integer status);
+    void updateRole(Long userId, String role);
+    void resetPassword(Long userId, String newPassword);
+    void invalidateToken(String token) ;
 } 

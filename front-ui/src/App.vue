@@ -12,9 +12,9 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 const router = useRouter()
 
 onMounted(() => {
-  // 如果当前路径是根路径，则重定向到首页
+  // 如果当前路径是根路径且不在白名单中，则重定向到首页
   if (router.currentRoute.value.path === '/') {
-    router.push('/dashboard')
+    router.push('/dashboard');
   }
 })
 </script>

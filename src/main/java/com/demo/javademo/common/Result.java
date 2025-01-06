@@ -20,15 +20,15 @@ public class Result<T> {
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>(true, "操作成功", data);
+        return new Result<>(true, "操作成功", ErrorCode.SUCCESS.getCode(), data);
     }
 
     public static <T> Result<T> success(String message, T data) {
-        return new Result<>(true, message, data);
+        return new Result<>(true, message, ErrorCode.SUCCESS.getCode(), data);
     }
 
     public static <T> Result<T> error(String message) {
-        return new Result<>(false, message, null);
+        return new Result<>(false, message, ErrorCode.OPERATION_ERROR.getCode(), null);
     }
     public static <T> Result<T> error(int code ,String message) {
         return new Result<>(false, message,code, null);

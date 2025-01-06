@@ -15,7 +15,7 @@ public class House {
     private Integer roomCount;
     private Integer floor;
     private Integer totalFloor;
-    private Integer buildYear;
+    private String buildYear;
     private String type;
     private String status;
     private String features;
