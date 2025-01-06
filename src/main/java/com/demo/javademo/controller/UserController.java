@@ -46,4 +46,10 @@ public class UserController {
         userService.resetPassword(id);
         return Result.success("密码重置成功");
     }
+
+    @GetMapping("/profile")
+    public Result<User> getProfile() {
+        Long currentUserId = userService.getCurrentUser().getId();
+        return Result.success(userService.findById(currentUserId));
+    }
 } 

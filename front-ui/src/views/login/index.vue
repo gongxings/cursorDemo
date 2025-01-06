@@ -1,52 +1,85 @@
 <template>
   <div class="login-container">
-    <div class="login-background"></div>
-    <el-card class="login-card">
-      <template #header>
-        <div class="login-header">
-          <h2>房产管理系统</h2>
-          <p>欢迎登录</p>
-        </div>
-      </template>
-      
-      <el-form
-        ref="loginFormRef"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-      >
-        <el-form-item prop="username">
-          <el-input
-            v-model="loginForm.username"
-            placeholder="请输入用户名"
-            prefix-icon="User"
-          />
-        </el-form-item>
-        
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            type="password"
-            placeholder="请输入密码"
-            prefix-icon="Lock"
-            show-password
-          />
-        </el-form-item>
-        
-        <el-form-item>
-          <el-button
-            :loading="loading"
-            type="primary"
-            class="login-button"
-            @click="handleLogin"
-          >
-            登录
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+    <div class="login-left">
+      <img src="/path/to/rental.svg" alt="租房图表" class="login-image" />
+    </div>
+    <div class="login-right">
+      <el-card class="login-card">
+        <template #header>
+          <div class="login-header">
+            <h2>房产管理系统</h2>
+            <p>欢迎登录</p>
+          </div>
+        </template>
+        <el-form
+          ref="loginFormRef"
+          :model="loginForm"
+          :rules="loginRules"
+          class="login-form"
+        >
+          <el-form-item prop="username">
+            <el-input
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+              prefix-icon="User"
+            />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              placeholder="请输入密码"
+              prefix-icon="Lock"
+              show-password
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              :loading="loading"
+              type="primary"
+              class="login-button"
+              @click="handleLogin"
+            >
+              登录
+            </el-button>
+            <el-button
+              type="default"
+              class="register-button"
+              @click="handleRegister"
+            >
+              注册
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+}
+.login-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-image {
+  max-width: 100%;
+  height: auto;
+}
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
@@ -98,149 +131,8 @@ const handleLogin = async () => {
     }
   });
 };
+
+const handleRegister = () => {
+  router.push('/register');
+};
 </script>
-
-<style lang="scss" scoped>
-.login-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #f0f2f5;
-}
-
-.login-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    #1a237e,
-    #0d47a1,
-    #01579b,
-    #006064,
-    #004d40
-  );
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  z-index: 0;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    left: -50%;
-    top: -50%;
-    right: -50%;
-    bottom: -50%;
-    background: linear-gradient(
-      0deg,
-      transparent 24%,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(255, 255, 255, 0.05) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(255, 255, 255, 0.05) 75%,
-      rgba(255, 255, 255, 0.05) 76%,
-      transparent 77%,
-      transparent
-    ),
-    linear-gradient(
-      90deg,
-      transparent 24%,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(255, 255, 255, 0.05) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(255, 255, 255, 0.05) 75%,
-      rgba(255, 255, 255, 0.05) 76%,
-      transparent 77%,
-      transparent
-    );
-    background-size: 50px 50px;
-  }
-
-  &::after {
-    background-position: 25px 25px;
-    animation: patternMove 20s linear infinite;
-  }
-}
-
-.login-card {
-  position: relative;
-  width: 420px;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  
-  .login-header {
-    text-align: center;
-    color: #1a237e;
-    
-    h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-    }
-    
-    p {
-      margin: 10px 0 0;
-      font-size: 16px;
-      color: #666;
-    }
-  }
-  
-  .login-form {
-    padding: 20px;
-    
-    .el-input {
-      height: 40px;
-      
-      :deep(.el-input__wrapper) {
-        background: rgba(255, 255, 255, 0.8);
-      }
-    }
-    
-    .login-button {
-      width: 100%;
-      height: 40px;
-      font-size: 16px;
-    }
-  }
-}
-
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes patternMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}
-
-// 响应式设计
-@media screen and (max-width: 576px) {
-  .login-card {
-    width: 90%;
-    margin: 0 20px;
-  }
-}
-</style>

@@ -20,4 +20,11 @@ public interface UserMapper {
     List<User> findAll();
     
     int updatePassword(@Param("id") Long id, @Param("password") String password);
+
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    int insertToken(@Param("userId") Long userId, @Param("token") String token);
+
+    int deleteToken(@Param("token") String token);
+
 } 

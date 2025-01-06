@@ -18,14 +18,20 @@
     <div class="main-container">
       <!-- 顶部导航栏 -->
       <div class="navbar">
+        <el-breadcrumb separator="/" class="breadcrumb-left">
+          <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+            {{ breadcrumb }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
         <div class="right-menu">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              <!-- {{ userStore.userInfo.username }} -->
+              <el-icon><user /></el-icon>
               <el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
+                <el-dropdown-item @click="handleProfile">个人中心</el-dropdown-item>
                 <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -50,7 +56,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessageBox } from 'element-plus';
 import { useUserStore } from '@/stores/user';
 import SidebarItem from './components/SidebarItem.vue';
-import { ArrowDown } from '@element-plus/icons-vue';
+import { ArrowDown, User } from '@element-plus/icons-vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -73,6 +79,14 @@ const handleLogout = () => {
     await userStore.logoutAction();
   });
 };
+
+const handleProfile = () => {
+  router.push('/profile');
+};
+
+const breadcrumbs = computed(() => {
+  return route.matched.map(r => r.meta.title || r.name);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -149,5 +163,25 @@ const handleLogout = () => {
 .fade-transform-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.breadcrumb-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 </style> 

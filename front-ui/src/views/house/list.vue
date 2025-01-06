@@ -4,7 +4,7 @@
     <el-card class="search-card">
       <el-form :model="searchForm" inline>
         <el-form-item label="区域">
-          <el-select v-model="searchForm.district" placeholder="请选择区域" clearable>
+          <el-select v-model="searchForm.district" placeholder="请选择区域" clearable style="width: 200px;">
             <el-option
               v-for="item in districtOptions"
               :key="item.value"
@@ -29,7 +29,7 @@
           />
         </el-form-item>
         <el-form-item label="房型">
-          <el-select v-model="searchForm.roomCount" placeholder="请选择房型" clearable>
+          <el-select v-model="searchForm.roomCount" placeholder="请选择房型" clearable style="width: 200px;">
             <el-option
               v-for="item in roomCountOptions"
               :key="item.value"
@@ -126,6 +126,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { Plus, Upload } from '@element-plus/icons-vue';
 import { getHouseList, searchHouses, deleteHouse } from '@/api/house';
 import type { HouseData, HouseQuery } from '@/api/house';
+import { getAllRegions } from '@/api/region';
 
 const router = useRouter();
 const loading = ref(false);
@@ -245,8 +246,19 @@ const handleImportSuccess = () => {
   fetchHouseList(); // 重新获取房源列表
 };
 
+// 获取区域选项
+const fetchDistrictOptions = async () => {
+  try {
+    const { data } = await getAllRegions();
+    districtOptions.splice(0, districtOptions.length, ...data);
+  } catch (error) {
+    console.error('获取区域选项失败:', error);
+  }
+};
+
 onMounted(() => {
   fetchHouseList();
+  fetchDistrictOptions();
 });
 </script>
 
