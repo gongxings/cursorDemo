@@ -1,5 +1,6 @@
 package com.demo.javademo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -52,7 +53,7 @@ public class HouseDTO {
     private Integer totalFloor;
 
     @Schema(description = "建造年份")
-    private Integer buildYear;
+    private String buildYear;
 
     @NotBlank(message = "房源类型不能为空")
     @Schema(description = "房源类型", required = true)

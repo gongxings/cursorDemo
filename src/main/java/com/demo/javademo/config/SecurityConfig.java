@@ -43,7 +43,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                     // 允许公开访问的 URL
-                    .requestMatchers("/api/auth/**", "/api/register").permitAll()
+                    .requestMatchers("/api/auth/login", "/api/register").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/swagger-resources/**").permitAll()
@@ -56,7 +56,7 @@ public class SecurityConfig {
                     .authenticationEntryPoint((request, response, authException) -> {
                         response.setContentType("application/json;charset=UTF-8");
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("{\"code\":401,\"message\":\"未授权\"}");
+                        response.getWriter().write("{\"success\":false,\"message\":\"未授权\"}");
                     })
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

@@ -21,7 +21,7 @@
         <div class="right-menu">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              {{ userStore.username }}
+              <!-- {{ userStore.userInfo.username }} -->
               <el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
@@ -70,7 +70,7 @@ const handleLogout = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
-    await userStore.logout();
+    await userStore.logoutAction();
     router.push('/login');
   });
 };

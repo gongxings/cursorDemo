@@ -3,19 +3,6 @@ import Layout from '@/layout/index.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    redirect: '/dashboard'
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
-    meta: {
-      title: '首页',
-      icon: 'House'
-    }
-  },
-  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
@@ -24,36 +11,35 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    meta: { title: '首页', icon: 'House' },
     children: [
       {
         path: 'dashboard',
-        name: 'Dashboard',
+        name: 'Dashboard', 
         component: () => import('@/views/dashboard/index.vue'),
-        meta: { title: '首页', icon: 'House' }
+        meta: { title: '首页' }
       }
     ]
   },
   {
     path: '/house',
     component: Layout,
-    redirect: '/house/list',
     meta: { title: '房源管理', icon: 'Office' },
     children: [
       {
-        path: 'list',
+        path: '/house/list',
         name: 'HouseList',
         component: () => import('@/views/house/list.vue'),
         meta: { title: '房源列表' }
       },
       {
-        path: 'add',
+        path: '/house/add',
         name: 'HouseAdd',
         component: () => import('@/views/house/form.vue'),
         meta: { title: '添加房源' }
       },
       {
-        path: 'edit/:id',
+        path: '/house/edit/:id',
         name: 'HouseEdit',
         component: () => import('@/views/house/form.vue'),
         meta: { title: '编辑房源', hidden: true }
@@ -63,23 +49,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/analysis',
     component: Layout,
-    redirect: '/analysis/market',
     meta: { title: '数据分析', icon: 'DataLine' },
     children: [
       {
-        path: 'market',
+        path: '/analysis/market',
         name: 'MarketAnalysis',
         component: () => import('@/views/analysis/market.vue'),
         meta: { title: '市场分析' }
       },
       {
-        path: 'price',
+        path: '/analysis/price',
         name: 'PriceAnalysis',
         component: () => import('@/views/analysis/price.vue'),
         meta: { title: '价格分析' }
       },
       {
-        path: 'reports',
+        path: '/analysis/reports',
         name: 'Reports',
         component: () => import('@/views/analysis/reports.vue'),
         meta: { title: '分析报告' }

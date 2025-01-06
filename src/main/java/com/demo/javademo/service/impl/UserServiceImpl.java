@@ -4,8 +4,10 @@ import com.demo.javademo.constant.RoleConstants;
 import com.demo.javademo.dto.LoginRequest;
 import com.demo.javademo.dto.LoginResponse;
 import com.demo.javademo.dto.RegisterRequest;
+import com.demo.javademo.dto.UserInfoResponse;
 import com.demo.javademo.entity.User;
 import com.demo.javademo.mapper.UserMapper;
+import com.demo.javademo.security.JwtUtils;
 import com.demo.javademo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Arrays;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,6 +34,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         try {
@@ -42,10 +49,13 @@ public class UserServiceImpl implements UserService {
             
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
+            // 使用 JWT 生成 token
+            String token = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
+            
             return LoginResponse.builder()
                     .success(true)
                     .message("登录成功")
-                    .token("mock-jwt-token") // 实际项目中应该生成JWT token
+                    .token(token)
                     .build();
         } catch (Exception e) {
             return LoginResponse.builder()
@@ -129,5 +139,21 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public boolean updateUserStatus(Long userId, Integer status) {
         return userMapper.updateStatus(userId, status) > 0;
+    }
+
+    @Override
+    public UserInfoResponse getCurrentUserInfo() {
+        User currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new RuntimeException("用户未登录");
+        }
+
+        return UserInfoResponse.builder()
+                .username(currentUser.getUsername())
+                .role(currentUser.getRole())
+                .permissions(Arrays.asList("house:view", "house:edit", "analysis:view"))  // 这里可以根据实际权限配置
+                .avatar("https://avatars.githubusercontent.com/u/1")  // 这里可以是实际的头像URL
+                .email(currentUser.getEmail())
+                .build();
     }
 } 

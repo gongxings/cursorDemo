@@ -10,11 +10,12 @@ export const useUserStore = defineStore('user', () => {
   async function loginAction(loginForm: { username: string; password: string }) {
     try {
       const res = await login(loginForm);
-      if (res.success && res.token) {
-        token.value = res.token;
-        return res;
+      if (res.data.success && res.data.token) {
+        token.value = res.data.token;
+        localStorage.setItem('token', res.data.token);
+        return res.data;
       }
-      throw new Error(res.message || '登录失败');
+      throw new Error(res.data.message || '登录失败');
     } catch (error) {
       throw error;
     }
@@ -24,10 +25,10 @@ export const useUserStore = defineStore('user', () => {
   async function getUserInfoAction() {
     try {
       const res = await getUserInfo();
-      if (res.success) {
-        userInfo.value = res.data;
+      if (res.data.success) {
+        userInfo.value = res.data.data;
       }
-      return res;
+      return res.data;
     } catch (error) {
       throw error;
     }

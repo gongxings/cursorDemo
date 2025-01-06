@@ -1,41 +1,48 @@
 package com.demo.javademo.common;
 
-import lombok.Data;
-import com.demo.javademo.common.ErrorCode;
-
-@Data
 public class Result<T> {
-    private int code;
+    private boolean success;
     private String message;
+    private Integer code;
     private T data;
 
-    private Result(int code, String message, T data) {
-        this.code = code;
+    public Result(boolean success, String message, T data) {
+        this.success = success;
         this.message = message;
         this.data = data;
     }
 
-    public static <T> Result<T> success() {
-        return new Result<>(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMessage(), null);
+    public Result(boolean success, String message,Integer code, T data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+        this.code = code;
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMessage(), data);
+        return new Result<>(true, "操作成功", data);
     }
 
     public static <T> Result<T> success(String message, T data) {
-        return new Result<>(ErrorCode.SUCCESS.getCode(), message, data);
+        return new Result<>(true, message, data);
     }
 
-    public static <T> Result<T> error(ErrorCode errorCode) {
-        return new Result<>(errorCode.getCode(), errorCode.getMessage(), null);
+    public static <T> Result<T> error(String message) {
+        return new Result<>(false, message, null);
+    }
+    public static <T> Result<T> error(int code ,String message) {
+        return new Result<>(false, message,code, null);
     }
 
-    public static <T> Result<T> error(int code, String message) {
-        return new Result<>(code, message, null);
+    public boolean isSuccess() {
+        return success;
     }
 
-    public static <T> Result<T> error(ErrorCode errorCode, String message) {
-        return new Result<>(errorCode.getCode(), message, null);
+    public String getMessage() {
+        return message;
+    }
+
+    public T getData() {
+        return data;
     }
 } 

@@ -86,10 +86,12 @@ const handleLogin = async () => {
         const res = await userStore.loginAction(loginForm);
         if (res.success) {
           ElMessage.success(res.message || '登录成功');
-          await router.push('/dashboard');
+          await userStore.getUserInfoAction();
+          await router.replace('/dashboard');
         }
       } catch (error: any) {
         console.error('登录失败:', error);
+        ElMessage.error(error.message || '登录失败');
       } finally {
         loading.value = false;
       }

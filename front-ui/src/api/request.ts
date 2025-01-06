@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
 import { useUserStore } from '@/stores/user';
@@ -8,6 +8,7 @@ interface BaseResponse<T = any> {
   success: boolean;
   message: string;
   token?: string;
+  data?: T;
   [key: string]: any;
 }
 
@@ -19,8 +20,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    const userStore = useUserStore();
-    const token = userStore.token;
+    const token = localStorage.getItem('token');
     
     // 如果是登录请求，不需要token
     if (config.url === '/auth/login') {
@@ -32,7 +32,7 @@ service.interceptors.request.use(
       return config;
     } else {
       // 非登录请求且没有token时跳转到登录页
-      router.push('/login');
+      router.replace('/login');
       return Promise.reject('No token found');
     }
   },
@@ -44,19 +44,20 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-  response => {
-    const res = response.data as BaseResponse;
+  (response: AxiosResponse<BaseResponse>) => {
+    const res = response.data;
     
     if (!res.success) {
       ElMessage.error(res.message || '请求失败');
       if (response.status === 401) {
         const userStore = useUserStore();
         userStore.resetState();
-        router.push('/login');
+        localStorage.removeItem('token');
+        router.replace('/login');
       }
       return Promise.reject(new Error(res.message || '请求失败'));
     }
-    return res;
+    return Promise.resolve(res);
   },
   error => {
     console.error('响应错误：', error);
@@ -64,7 +65,8 @@ service.interceptors.response.use(
       ElMessage.error('登录已过期，请重新登录');
       const userStore = useUserStore();
       userStore.resetState();
-      router.push('/login');
+      localStorage.removeItem('token');
+      router.replace('/login');
     } else {
       const message = error.response?.data?.message || '请求失败';
       ElMessage.error(message);
