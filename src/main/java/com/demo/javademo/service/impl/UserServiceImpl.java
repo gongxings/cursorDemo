@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-        user.setPassword(passwordEncoder.encode("defaultPassword")); // 设置默认密码
+        user.setPassword(passwordEncoder.encode("123456")); // 设置默认密码
         userMapper.updatePassword(id, user.getPassword());
     }
 

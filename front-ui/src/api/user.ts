@@ -34,28 +34,29 @@ export function logout() {
 }
 
 export interface UserData {
-  id: number;
+  id?: number;
   username: string;
   role: string;
+  password?: string;
 }
 
 export function getUserList() {
   return request<UserData[]>({
-    url: '/api/users',
+    url: '/users',
     method: 'get'
   });
 }
 
 export function getUserById(userId: number) {
   return request<UserData>({
-    url: `/api/users/${userId}`,
+    url: `/users/${userId}`,
     method: 'get'
   });
 }
 
 export function createUser(data: UserData) {
   return request({
-    url: '/api/users',
+    url: '/users',
     method: 'post',
     data
   });
@@ -63,7 +64,7 @@ export function createUser(data: UserData) {
 
 export function updateUser(userId: number, data: UserData) {
   return request({
-    url: `/api/users/${userId}`,
+    url: `/users/${userId}`,
     method: 'put',
     data
   });
@@ -71,14 +72,14 @@ export function updateUser(userId: number, data: UserData) {
 
 export function deleteUser(userId: number) {
   return request({
-    url: `/api/users/${userId}`,
+    url: `/users/${userId}`,
     method: 'delete'
   });
 }
 
 export function resetPassword(userId: number) {
   return request({
-    url: `/api/users/${userId}/reset-password`,
+    url: `/users/${userId}/reset-password`,
     method: 'post'
   });
 } 

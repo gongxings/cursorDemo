@@ -47,6 +47,7 @@ const handleSubmit = async () => {
     await updateUser(userForm.id!, userForm);
     ElMessage.success('用户更新成功');
   } else {
+    userForm.password = '123456';
     await createUser(userForm);
     ElMessage.success('用户创建成功');
   }

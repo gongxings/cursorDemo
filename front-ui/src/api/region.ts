@@ -2,21 +2,21 @@ import request from './request';
 
 export const getRegionById = (id: number) => {
     return request({
-        url: `/api/regions/${id}`,
+        url: `/regions/${id}`,
         method: 'get'
     });
 };
 
 export const getAllRegions = () => {
     return request({
-        url: '/api/regions',
+        url: '/regions',
         method: 'get'
     });
 };
 
 export const createRegion = (data: any) => {
     return request({
-        url: '/api/regions',
+        url: '/regions',
         method: 'post',
         data
     });
@@ -24,7 +24,7 @@ export const createRegion = (data: any) => {
 
 export const updateRegion = (data: any) => {
     return request({
-        url: '/api/regions',
+        url: '/regions',
         method: 'put',
         data
     });
@@ -32,7 +32,7 @@ export const updateRegion = (data: any) => {
 
 export const deleteRegion = (id: number) => {
     return request({
-        url: `/api/regions/${id}`,
+        url: `/regions/${id}`,
         method: 'delete'
     });
 }; 
