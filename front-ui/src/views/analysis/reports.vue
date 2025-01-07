@@ -1,14 +1,13 @@
 <template>
   <div class="reports">
-    <!-- 操作按钮 -->
-    <div class="operation-bar">
-      <el-button type="primary" @click="handleGenerateReport">
-        <el-icon><Plus /></el-icon>生成报告
-      </el-button>
-    </div>
-
     <!-- 报告列表 -->
     <el-card>
+      <!-- 操作按钮 -->
+      <div class="operation-bar">
+        <el-button type="primary" @click="handleGenerateReport">
+          <el-icon><Plus /></el-icon>生成报告
+        </el-button>
+      </div>
       <el-table
         v-loading="loading"
         :data="reportList"
@@ -206,8 +205,8 @@ const fetchReportList = async () => {
   loading.value = true;
   try {
     const { data } = await getReportHistory();
-    reportList.value = data;
-    total.value = data.length; // 实际项目中应该从后端获取总数
+    reportList.value = data?.data;
+    total.value = data?.data.length;
   } catch (error) {
     console.error('获取报告列表失败:', error);
     ElMessage.error('获取报告列表失败');

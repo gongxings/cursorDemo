@@ -1,6 +1,10 @@
 <template>
   <template v-if="!item.meta?.hidden">
-    <el-sub-menu v-if="item.children && item.children.length > 1" :index="resolvePath(basePath, item.path)">
+    <el-sub-menu v-if="item.children && item.children.length > 1" 
+      :index="resolvePath(basePath, item.path)" 
+      :collapse="false"
+      :default-openeds="[resolvePath(basePath, item.path)]"
+      style="max-height: calc(100vh - 60px); overflow-y: auto;">
       <template #title>
         <el-icon><component :is="item.meta?.icon" /></el-icon>
         <span>{{ item.meta?.title }}</span>
@@ -17,6 +21,7 @@
       <el-menu-item
         v-if="item.children"
         :index="resolvePath(basePath, item.children[0].path)"
+        :collapse="false"
       >
         <el-icon><component :is="item.children[0].meta?.icon || item.meta?.icon" /></el-icon>
         <template #title>{{ item.children[0].meta?.title || item.meta?.title }}</template>
@@ -34,7 +39,6 @@
 
 <script setup lang="ts">
 import { RouteRecordRaw } from 'vue-router';
-import * as ElementPlusIcons from '@element-plus/icons-vue';
 
 defineProps<{
   item: RouteRecordRaw;

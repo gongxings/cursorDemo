@@ -5,10 +5,12 @@
       <div class="logo">测试管理系统</div>
       <el-menu
         :default-active="activeMenu"
-        background-color="#304156"
+        background-color="#304156" 
         text-color="#bfcbd9"
         active-text-color="#409EFF"
         :router="true"
+        :default-openeds="routes.map(route => route.path)"
+        style="max-height: calc(100vh - 60px); overflow-y: overlay;"
       >
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" base-path="/" />
       </el-menu>
@@ -103,6 +105,7 @@ const breadcrumbs = computed(() => {
   position: fixed;
   left: 0;
   z-index: 1001;
+  overflow-y: auto;
 
   .logo {
     height: 50px;

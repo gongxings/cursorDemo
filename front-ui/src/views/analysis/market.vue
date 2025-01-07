@@ -4,7 +4,13 @@
     <el-card class="filter-card">
       <el-form :model="filterForm" inline>
         <el-form-item label="区域">
-          <el-select v-model="filterForm.district" placeholder="请选择区域" clearable @change="handleDistrictChange">
+          <el-select 
+            v-model="filterForm.district" 
+            placeholder="请选择区域" 
+            clearable 
+            @change="handleDistrictChange"
+            style="width: 200px;"
+          >
             <el-option
               v-for="item in districtOptions"
               :key="item.value"
@@ -124,19 +130,20 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { getMarketAnalysis } from '@/api/analysis';
+import { getRegions } from '@/api/region';
 import type { MarketAnalysis } from '@/api/analysis';
 import * as echarts from 'echarts';
+
+// Define a type for the region
+interface Region {
+  name: string;
+}
 
 const filterForm = reactive({
   district: ''
 });
 
-const districtOptions = [
-  { value: '朝阳区', label: '朝阳区' },
-  { value: '海淀区', label: '海淀区' },
-  { value: '东城区', label: '东城区' },
-  { value: '西城区', label: '西城区' }
-];
+const districtOptions = ref([]);
 
 const marketData = reactive<MarketAnalysis>({
   district: '',
@@ -147,6 +154,23 @@ const marketData = reactive<MarketAnalysis>({
   avgArea: 0,
   pricePerSquareMeter: 0
 });
+
+// 获取区域数据
+const fetchDistrictOptions = async () => {
+  try {
+    const { data } = await getRegions();
+    districtOptions.value = await data?.data?.map((region: Region) => ({
+      value: region.county,
+      label: region.county
+    }));
+    // 设置默认选中第一个区域
+    if (districtOptions.value.length > 0) {
+      filterForm.district = districtOptions.value[0].value||'朝阳区';
+    }
+  } catch (error) {
+    console.error('获取区域数据失败:', error);
+  }
+};
 
 // 图表实例
 let districtChart: echarts.ECharts | null = null;
@@ -260,7 +284,7 @@ const initCharts = () => {
 };
 
 // 获取市场分析数据
-const fetchMarketData = async (district: string = '') => {
+const fetchMarketData = async (district: string = '朝阳区') => {
   try {
     const { data } = await getMarketAnalysis(district);
     Object.assign(marketData, data);
@@ -291,6 +315,7 @@ const handleResize = () => {
 };
 
 onMounted(() => {
+  fetchDistrictOptions();
   initCharts();
   fetchMarketData();
   window.addEventListener('resize', handleResize);

@@ -129,7 +129,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { Plus, Upload, Download } from '@element-plus/icons-vue';
 import { getHouseList, searchHouses, deleteHouse } from '@/api/house';
 import type { HouseData, HouseQuery } from '@/api/house';
-import { getAllRegions } from '@/api/region';
+import { getRegions as getAllRegions } from '@/api/region';
 
 const router = useRouter();
 const loading = ref(false);

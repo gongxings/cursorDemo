@@ -1,12 +1,12 @@
 <template>
   <div class="house-view">
     <el-card>
-      <h2>{{ house.title }}</h2>
-      <p>区域: {{ house.district }}</p>
-      <p>价格: {{ house.price }}元/月</p>
-      <p>面积: {{ house.area }}㎡</p>
-      <p>房型: {{ house.roomCount }}室</p>
-      <p>状态: <el-tag :type="house.status === '已租' ? 'success' : 'info'">{{ house.status }}</el-tag></p>
+      <h2>{{ house?.title }}</h2>
+      <p>区域: {{ house?.district }}</p>
+      <p>价格: {{ house?.price }}元/月</p>
+      <p>面积: {{ house?.area }}㎡</p>
+      <p>房型: {{ house?.roomCount }}室</p>
+      <p>状态: <el-tag :type="house?.status === '已租' ? 'success' : 'info'">{{ house?.status }}</el-tag></p>
     </el-card>
   </div>
 </template>
@@ -23,7 +23,7 @@ const house = ref<HouseData | null>(null);
 const fetchHouse = async () => {
   const { id } = route.params;
   if (id) {
-    const { data } = await getHouseById(id as string);
+    const { data } = await getHouseById(Number(id));
     house.value = data;
   }
 };

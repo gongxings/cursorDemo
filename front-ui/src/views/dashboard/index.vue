@@ -87,7 +87,7 @@
               <span>价格趋势（近7天）</span>
             </div>
           </template>
-          <div class="chart" ref="trendChartRef"></div>
+          <div class="chart" ref="trendChartRef" style="height: 300px;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue';
 import * as echarts from 'echarts';
 import { getDashboardStats } from '@/api/dashboard';
 
@@ -131,7 +131,9 @@ const formatNumber = (value: number) => {
 };
 
 // 初始化图表
-const initCharts = () => {
+const initCharts = async () => {
+  await nextTick(); // 确保 DOM 元素已经渲染完成
+
   if (districtChartRef.value) {
     districtChart = echarts.init(districtChartRef.value);
     districtChart.setOption({
@@ -201,7 +203,7 @@ const initCharts = () => {
 const fetchData = async () => {
   try {
     const { data } = await getDashboardStats();
-    Object.assign(dashboardData, data);
+    Object.assign(dashboardData, data?.data);
     initCharts();
   } catch (error) {
     console.error('获取首页数据失败:', error);
@@ -259,6 +261,8 @@ onUnmounted(() => {
     .chart-card {
       .chart {
         height: 300px;
+        min-width: 300px;
+        min-height: 300px;
       }
     }
   }

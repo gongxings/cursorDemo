@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "房源管理", description = "房源相关接口")
 @RestController
@@ -107,21 +109,35 @@ public class HouseController {
     @GetMapping("/template")
     public ResponseEntity<byte[]> downloadTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("House Template");
+            Sheet sheet = workbook.createSheet("房源信息");
             Row header = sheet.createRow(0);
-            header.createCell(0).setCellValue("标题");
-            header.createCell(1).setCellValue("地址");
-            header.createCell(2).setCellValue("区域");
-            header.createCell(3).setCellValue("价格");
-            header.createCell(4).setCellValue("面积");
-            header.createCell(5).setCellValue("房型");
-            header.createCell(6).setCellValue("楼层");
-            header.createCell(7).setCellValue("总楼层");
-            header.createCell(8).setCellValue("建筑年代");
-            header.createCell(9).setCellValue("房屋类型");
-            header.createCell(10).setCellValue("房屋特色");
-            header.createCell(11).setCellValue("配套设施");
-            header.createCell(12).setCellValue("房源描述");
+            // 设置列宽(单位:字符宽度)
+            // 定义表头和列宽信息
+            List<Map<String, Object>> columns = Arrays.asList(
+                Map.of("title", "标题", "width", 200),
+                Map.of("title", "地址", "width", 300),
+                Map.of("title", "区域", "width", 150),
+                Map.of("title", "价格", "width", 150),
+                Map.of("title", "面积", "width", 150),
+                Map.of("title", "房型", "width", 100),
+                Map.of("title", "楼层", "width", 100),
+                Map.of("title", "总楼层", "width", 100),
+                Map.of("title", "建筑年代", "width", 150),
+                Map.of("title", "房屋类型", "width", 150),
+                Map.of("title", "房屋特色", "width", 300),
+                Map.of("title", "配套设施", "width", 300),
+                Map.of("title", "房源描述", "width", 400)
+            );
+
+            // 设置列宽和表头
+            for (int i = 0; i < columns.size(); i++) {
+                Map<String, Object> column = columns.get(i);
+                // 设置列宽,并使用自适应
+                sheet.setColumnWidth(i, (int)column.get("width") * 256);
+//                sheet.autoSizeColumn(i);
+                // 创建表头
+                header.createCell(i).setCellValue((String)column.get("title"));
+            }
 
             // Adjust column width
             for (int i = 0; i <= 12; i++) {
@@ -134,7 +150,7 @@ public class HouseController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "house_template.xlsx");
+            headers.setContentDispositionFormData("attachment", "template.xlsx");
 
             return ResponseEntity.ok()
                     .headers(headers)
