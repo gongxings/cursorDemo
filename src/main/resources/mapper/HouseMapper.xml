@@ -48,7 +48,7 @@
         ORDER BY create_time DESC
     </select>
 
-    <select id="search" parameterType="com.demo.javademo.entity.House" resultType="com.demo.javademo.entity.House">
+    <select id="search" parameterType="com.demo.javademo.dto.HouseQueryDTO" resultType="com.demo.javademo.entity.House">
         SELECT * FROM house
         <where>
             <if test="district != null and district != ''">

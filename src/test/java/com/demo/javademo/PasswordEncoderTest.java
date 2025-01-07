@@ -8,7 +8,7 @@ public class PasswordEncoderTest {
     @Test
     public void generatePassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = "password";
+        String rawPassword = "123456";
         String encodedPassword = encoder.encode(rawPassword);
         System.out.println("加密后: " + encodedPassword);
         // 验证密码

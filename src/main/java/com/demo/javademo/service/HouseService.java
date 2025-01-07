@@ -4,6 +4,7 @@ import com.demo.javademo.dto.HouseDTO;
 import com.demo.javademo.dto.HouseQueryDTO;
 import com.demo.javademo.entity.House;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface HouseService {
     List<House> findAll();
@@ -19,4 +20,6 @@ public interface HouseService {
     House update(Long id, HouseDTO houseDTO);
     
     void delete(Long id);
+    
+    void importHouses(MultipartFile file) throws Exception;
 } 

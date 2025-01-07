@@ -8,13 +8,18 @@ import com.demo.javademo.mapper.HouseMapper;
 import com.demo.javademo.service.HouseService;
 import com.demo.javademo.service.UserService;
 import com.demo.javademo.utils.BeanCopyUtils;
+import com.demo.javademo.utils.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -51,8 +56,8 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public List<House> search(HouseQueryDTO queryDTO) {
         // 使用BeanCopyUtils进行DTO到Entity的转换
-        House queryEntity = BeanCopyUtils.copyBean(queryDTO, House.class);
-        return houseMapper.search(queryEntity);
+//        House queryEntity = BeanCopyUtils.copyBean(queryDTO, House.class);
+        return houseMapper.search(queryDTO);
     }
 
     @Override
@@ -73,6 +78,8 @@ public class HouseServiceImpl implements HouseService {
         // 设置创建者
         house.setCreatorId(userService.getCurrentUser().getId());
         house.setStatus("AVAILABLE");
+        //字符串获取年份
+        house.setBuildYear(String.valueOf(DateUtils.getYearFromDateStringOffset(houseDTO.getBuildYear())));
         
         houseMapper.insert(house);
         return house;
@@ -125,5 +132,40 @@ public class HouseServiceImpl implements HouseService {
         }
 
         houseMapper.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('house:edit')")
+    public void importHouses(MultipartFile file) throws Exception {
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Skip header row
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                House house = new House();
+                house.setTitle(row.getCell(0).getStringCellValue());
+                house.setAddress(row.getCell(1).getStringCellValue());
+                house.setDistrict(row.getCell(2).getStringCellValue());
+                house.setPrice(BigDecimal.valueOf(row.getCell(3).getNumericCellValue()));
+                house.setArea(BigDecimal.valueOf(row.getCell(4).getNumericCellValue()));
+                house.setRoomCount((int) row.getCell(5).getNumericCellValue());
+                house.setFloor((int) row.getCell(6).getNumericCellValue());
+                house.setTotalFloor((int) row.getCell(7).getNumericCellValue());
+                house.setBuildYear(row.getCell(8).getStringCellValue());
+                house.setType(row.getCell(9).getStringCellValue());
+                house.setFeatures(objectMapper.writeValueAsString(row.getCell(10).getStringCellValue().split(",")));
+                house.setFacilities(objectMapper.writeValueAsString(row.getCell(11).getStringCellValue().split(",")));
+                house.setDescription(row.getCell(12).getStringCellValue());
+
+                house.setCreatorId(userService.getCurrentUser().getId());
+                house.setStatus("AVAILABLE");
+
+                houseMapper.insert(house);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Excel解析失败", e);
+        }
     }
 } 

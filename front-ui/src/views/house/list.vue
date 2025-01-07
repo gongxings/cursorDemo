@@ -45,25 +45,28 @@
       </el-form>
     </el-card>
 
-    <!-- 操作按钮 -->
-    <div class="operation-bar">
-      <el-button type="primary" @click="handleAdd">
-        <el-icon><Plus /></el-icon>添加房源
-      </el-button>
-      <el-upload
-        action="/api/houses/import"
-        accept=".csv, .xlsx"
-        :on-success="handleImportSuccess"
-        :show-file-list="false"
-      >
-        <el-button type="primary">
-          <el-icon><Upload /></el-icon>导入房源
-        </el-button>
-      </el-upload>
-    </div>
-
     <!-- 房源列表 -->
     <el-card>
+      <!-- 操作按钮 -->
+      <div class="operation-bar">
+        <el-button type="primary" @click="handleAdd">
+          <el-icon><Plus /></el-icon>添加房源
+        </el-button>
+        <el-upload
+            action="/api/houses/import"
+            accept=".csv, .xlsx"
+            :on-success="handleImportSuccess"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+        >
+          <el-button type="primary">
+            <el-icon><Upload /></el-icon>导入房源
+          </el-button>
+        </el-upload>
+        <el-button type="primary" @click="downloadTemplate">
+          <el-icon><Download /></el-icon>下载模板
+        </el-button>
+      </div>
       <el-table
         v-loading="loading"
         :data="houseList"
@@ -123,7 +126,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { Plus, Upload } from '@element-plus/icons-vue';
+import { Plus, Upload, Download } from '@element-plus/icons-vue';
 import { getHouseList, searchHouses, deleteHouse } from '@/api/house';
 import type { HouseData, HouseQuery } from '@/api/house';
 import { getAllRegions } from '@/api/region';
@@ -254,6 +257,20 @@ const fetchDistrictOptions = async () => {
   } catch (error) {
     console.error('获取区域选项失败:', error);
   }
+};
+
+// 上传前检查文件类型
+const beforeUpload = (file: File) => {
+  const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel';
+  if (!isExcel) {
+    ElMessage.error('只能上传 Excel 文件');
+  }
+  return isExcel;
+};
+
+// 下载模板
+const downloadTemplate = () => {
+  window.open('/api/houses/template', '_blank');
 };
 
 onMounted(() => {

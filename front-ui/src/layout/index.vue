@@ -2,7 +2,7 @@
   <div class="app-wrapper">
     <!-- 侧边栏 -->
     <div class="sidebar-container">
-      <div class="logo">房源管理系统</div>
+      <div class="logo">测试管理系统</div>
       <el-menu
         :default-active="activeMenu"
         background-color="#304156"

@@ -27,6 +27,10 @@ public class Result<T> {
         return new Result<>(true, message, ErrorCode.SUCCESS.getCode(), data);
     }
 
+    public static <T> Result<T> success(String message) {
+        return new Result<>(true, message, ErrorCode.SUCCESS.getCode(), null);
+    }
+
     public static <T> Result<T> error(String message) {
         return new Result<>(false, message, ErrorCode.OPERATION_ERROR.getCode(), null);
     }

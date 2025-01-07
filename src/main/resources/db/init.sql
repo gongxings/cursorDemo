@@ -123,3 +123,19 @@ CREATE TABLE UserToken (
                            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                            FOREIGN KEY (userId) REFERENCES User(id)
 );
+
+
+CREATE TABLE region (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    county VARCHAR(255) NOT NULL
+);
+
+INSERT INTO region (province, city, county) VALUES
+('北京市', '北京市', '东城区'),
+('北京市', '北京市', '西城区'),
+('上海市', '上海市', '黄浦区'),
+('上海市', '上海市', '徐汇区'),
+('广东省', '广州市', '天河区'),
+('广东省', '深圳市', '南山区');

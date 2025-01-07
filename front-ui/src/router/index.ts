@@ -98,7 +98,13 @@ const routes: Array<RouteRecordRaw> = [
         name: 'UserEdit',
         component: () => import('@/views/user/form.vue'),
         meta: { title: '编辑用户', hidden: true }
-      }
+      },
+      {
+        path: 'register',
+        name: 'UserRegister',
+        component: () => import('@/views/user/Register.vue'),
+        meta: { title: '添加用户', hidden: true }
+      },
     ]
   },
   {

@@ -49,6 +49,7 @@ public class SecurityConfig {
                     .requestMatchers("/swagger-resources/**").permitAll()
                     .requestMatchers("/webjars/**").permitAll()
                     .requestMatchers("/error").permitAll()
+                    .requestMatchers("/api/houses/template").permitAll()
                     // 其他所有请求需要认证
                     .anyRequest().authenticated()
                 )

@@ -1,5 +1,6 @@
 package com.demo.javademo.mapper;
 
+import com.demo.javademo.dto.HouseQueryDTO;
 import com.demo.javademo.entity.House;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +14,7 @@ public interface HouseMapper {
     
     List<House> findByDistrict(@Param("district") String district);
     
-    List<House> search(House query);
+    List<House> search(HouseQueryDTO queryDTO);
     
     void insert(House house);
     
