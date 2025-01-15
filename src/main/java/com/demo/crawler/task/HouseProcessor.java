@@ -1,6 +1,4 @@
 package com.demo.crawler.task;
-
-import com.demo.crawler.ip.KuaiDaiLiIP;
 import com.demo.javademo.entity.House;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +9,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.proxy.Proxy;
-import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.selector.Html;
@@ -27,8 +23,8 @@ public class HouseProcessor implements PageProcessor{
 
     @Autowired
     private HouseDataPipeline houseDataPipeline;
-    @Autowired
-    private KuaiDaiLiIP kuaiDaiLiIP;
+//    @Autowired
+//    private KuaiDaiLiIP kuaiDaiLiIP;
 
     private String url = "https://hf.58.com/chuzu/?PGTID=0d100000-0034-5448-1684-b72bc1e684da&ClickID=4";
     @Override
@@ -134,7 +130,7 @@ public class HouseProcessor implements PageProcessor{
     //fixedDelay:每隔多久执行方法
     //@Scheduled(initialDelay = 1000,fixedDelay = 100*1000)
     //开启定时任务，每隔5秒爬一次
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "0 0 0/5 * * *")
     public void process(){
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
 //        String ipList = kuaiDaiLiIP.getIPList();

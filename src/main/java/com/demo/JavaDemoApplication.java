@@ -1,4 +1,4 @@
-package com.demo.javademo;
+package com.demo;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +7,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @MapperScan("com.demo.javademo.mapper")
-@EnableScheduling//开启定时任务
+//开启定时任务
+@EnableScheduling
 public class JavaDemoApplication {
 
 	public static void main(String[] args) {
