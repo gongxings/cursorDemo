@@ -159,7 +159,13 @@ const roomCountOptions = [
   { value: 1, label: '一室' },
   { value: 2, label: '两室' },
   { value: 3, label: '三室' },
-  { value: 4, label: '四室及以上' }
+  { value: 4, label: '四室' },
+  { value: 5, label: '五室' },
+  { value: 6, label: '六室' },
+  { value: 7, label: '七室' },
+  { value: 8, label: '八室' },
+  { value: 9, label: '九室' },
+  { value: 10, label: '十室及以上' }
 ];
 
 // 获取房源列表
@@ -167,8 +173,8 @@ const fetchHouseList = async () => {
   loading.value = true;
   try {
     const { data } = await getHouseList();
-    houseList.value = data;
-    total.value = data.length; // 实际项目中应该从后端获取总数
+    houseList.value = data.data;
+    total.value = data.data.length; // 实际项目中应该从后端获取总数
   } catch (error) {
     console.error('获取房源列表失败:', error);
     ElMessage.error('获取房源列表失败');
@@ -182,8 +188,8 @@ const handleSearch = async () => {
   loading.value = true;
   try {
     const { data } = await searchHouses(searchForm);
-    houseList.value = data;
-    total.value = data.length;
+    houseList.value = data.data;
+    total.value = data.data.length;
   } catch (error) {
     console.error('搜索房源失败:', error);
     ElMessage.error('搜索房源失败');

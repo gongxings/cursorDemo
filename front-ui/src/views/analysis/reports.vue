@@ -229,7 +229,7 @@ const submitGenerateReport = async () => {
     if (valid) {
       submitting.value = true;
       try {
-        await generateReport(reportForm.type);
+        await generateReport(reportForm);
         ElMessage.success('报告生成任务已提交');
         dialogVisible.value = false;
         fetchReportList();
@@ -264,7 +264,7 @@ const handlePreview = async (row: any) => {
 const handleExport = async (row: any) => {
   try {
     const blob = await exportReport(row.id);
-    const url = window.URL.createObjectURL(blob);
+    const url = window.URL.createObjectURL(blob.data);
     const link = document.createElement('a');
     link.href = url;
     link.download = `${row.title}.pdf`;

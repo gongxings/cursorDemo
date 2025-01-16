@@ -12,16 +12,18 @@ import com.rental.dataAnalysis.mapper.MarketDataMapper;
 import com.rental.dataAnalysis.service.AnalysisService;
 import com.rental.dataAnalysis.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -139,17 +141,21 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     @Override
     @Transactional
-    public AnalysisReport generateReport(String type) {
-        AnalysisReport report = new AnalysisReport();
-        report.setTitle(type + "分析报告-" + new Date());
-        report.setType(type);
+    public AnalysisReport generateReport(AnalysisReport report) {
+//        AnalysisReport report = new AnalysisReport();
+        String type = report.getType();
+        report.setTitle(report.getDistrict()+report.getType() + "分析报告-" + report.getTitle());
         report.setCreatorId(userService.getCurrentUser().getId());
         
         Map<String, Object> content = new HashMap<>();
         if ("market".equals(type)) {
-            content.put("marketAnalysis", analyzeMarket(null));
+            content.put("marketAnalysis", analyzeMarket(report.getDistrict()));
         } else if ("price".equals(type)) {
             content.put("priceAnalysis", analyzePricing());
+        }else if("comprehensive".equals(type)){
+            content.put("priceAnalysis", analyzePricing());
+        }else {
+            throw ErrorCode.PARAM_ERROR.exception("未知的分析类型");
         }
         
         try {
@@ -157,7 +163,8 @@ public class AnalysisServiceImpl implements AnalysisService {
         } catch (Exception e) {
             throw ErrorCode.SYSTEM_ERROR.exception("生成报告失败");
         }
-        
+        report.setCreateTime(LocalDateTime.now());
+        report.setStatus("已完成");
         analysisReportMapper.insert(report);
         return report;
     }
@@ -173,30 +180,27 @@ public class AnalysisServiceImpl implements AnalysisService {
         if (report == null) {
             throw ErrorCode.PARAM_ERROR.exception("报告不存在");
         }
-        
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("分析报告");
-            
-            // 创建标题行
-            XSSFRow titleRow = sheet.createRow(0);
-            titleRow.createCell(0).setCellValue("报告标题");
-            titleRow.createCell(1).setCellValue(report.getTitle());
-            
-            // 创建内容
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            PdfWriter writer = new PdfWriter(outputStream);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            // 添加标题
+            document.add(new Paragraph(report.getTitle()).setFontSize(18).setBold());
+
+            // 添加生成时间
+            document.add(new Paragraph("生成时间: " + report.getCreateTime().toString()));
+
+            // 添加报告内容
             Map<String, Object> content = objectMapper.readValue(report.getContent(), Map.class);
-            int rowNum = 2;
-            
             for (Map.Entry<String, Object> entry : content.entrySet()) {
-                XSSFRow row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue(entry.getKey());
-                row.createCell(1).setCellValue(entry.getValue().toString());
+                document.add(new Paragraph(entry.getKey() + ": " + entry.getValue().toString()));
             }
-            
-            // 导出为字节数组
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            workbook.write(outputStream);
+
+            document.close();
             return outputStream.toByteArray();
-            
+
         } catch (Exception e) {
             throw ErrorCode.SYSTEM_ERROR.exception("导出报告失败");
         }

@@ -46,16 +46,13 @@ public class UserServiceImpl implements UserService {
                             loginRequest.getPassword()
                     )
             );
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             // 使用 JWT 生成 token
             String token = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
 
             return LoginResponse.builder()
                     .success(true)
                     .message("登录成功")
-                    .token("mock-jwt-token") // 实际项目中应该生成JWT token
                     .token(token)
                     .build();
         } catch (Exception e) {
@@ -172,6 +169,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(1);
         userMapper.insert(user);
         return user;
     }

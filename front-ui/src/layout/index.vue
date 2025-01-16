@@ -5,14 +5,14 @@
       <div class="logo">测试管理系统</div>
       <el-menu
         :default-active="activeMenu"
-        background-color="#304156" 
+        background-color="#304156"
         text-color="#bfcbd9"
         active-text-color="#409EFF"
         :router="true"
-        :default-openeds="routes.map(route => route.path)"
+        :default-openeds="filteredRoutes.map(route => route.path)"
         style="max-height: calc(100vh - 60px); overflow-y: overlay;"
       >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" base-path="/" />
+        <sidebar-item v-for="route in filteredRoutes" :key="route.path" :item="route" base-path="/" />
       </el-menu>
     </div>
 
@@ -28,6 +28,7 @@
         <div class="right-menu">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
+              {{ userName }}
               <el-icon><user /></el-icon>
               <el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
@@ -70,6 +71,21 @@ const routes = computed(() => {
 
 const activeMenu = computed(() => {
   return route.path;
+});
+
+const userName = computed(() => {
+  return userStore.userInfo?.username;
+});
+
+const userRole = computed(() => {
+  return userStore.userInfo?.role;
+});
+
+const filteredRoutes = computed(() => {
+  return routes.value.filter(route => {
+    if (!route.meta?.roles) return true;
+    return route.meta.roles.includes(userRole.value);
+  });
 });
 
 const handleLogout = () => {

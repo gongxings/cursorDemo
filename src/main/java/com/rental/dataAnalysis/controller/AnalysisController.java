@@ -42,12 +42,10 @@ public class AnalysisController {
     }
 
     @Operation(summary = "生成分析报告")
-    @PostMapping("/report/{type}")
+    @PostMapping("/report")
     @PreAuthorize("hasAuthority('analysis:generate')")
-    public Result<AnalysisReport> generateReport(
-            @Parameter(description = "报告类型(market/price)", required = true)
-            @PathVariable String type) {
-        return Result.success(analysisService.generateReport(type));
+    public Result<AnalysisReport> generateReport(@RequestBody AnalysisReport report) {
+        return Result.success(analysisService.generateReport(report));
     }
 
     @Operation(summary = "获取报告历史")

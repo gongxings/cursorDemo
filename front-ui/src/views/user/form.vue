@@ -10,6 +10,12 @@
           <el-option label="普通用户" value="USER"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="userForm.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="userForm.phone" autocomplete="off"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSubmit">提交</el-button>
         <el-button @click="handleCancel">取消</el-button>
@@ -37,7 +43,7 @@ const isEdit = route.name === 'UserEdit';
 
 const fetchUser = async (id: number) => {
   const { data } = await getUserById(id);
-  Object.assign(userForm, data);
+  Object.assign(userForm, data.data);
 };
 
 const handleSubmit = async () => {

@@ -63,4 +63,9 @@
         UPDATE user SET password = #{password}
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteToken">
+        DELETE FROM user_token
+        WHERE token = #{token}
+    </delete>
 </mapper> 

@@ -20,13 +20,11 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token');
-    
     // 如果是登录请求，不需要token
     if (config.url === '/auth/login') {
       return config;
     }
-
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
       return config;
@@ -46,16 +44,19 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse<BaseResponse>) => {
     const res = response.data;
-    
     if (!res.success) {
-      ElMessage.error(res.message || '请求失败');
-      if (response.status === 401) {
-        const userStore = useUserStore();
-        userStore.resetState();
-        localStorage.removeItem('token');
-        router.replace('/login');
-      }
-      return Promise.reject(new Error(res.message || '请求失败'));
+        if(response.status === 200){
+
+        }else{
+            ElMessage.error(res.message || '请求失败');
+            if (response.status === 401) {
+                const userStore = useUserStore();
+                userStore.resetState();
+                localStorage.removeItem('token');
+                router.replace('/login');
+            }
+            return Promise.reject(new Error(res.message || '请求失败'));
+        }
     }
     return response;
   },

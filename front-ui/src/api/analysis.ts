@@ -1,4 +1,5 @@
 import request from './request';
+import {HouseQuery} from "@/api/house.ts";
 
 export interface MarketAnalysis {
   district: string;
@@ -18,6 +19,13 @@ export interface PriceAnalysis {
   priceGrowthRate: number;
 }
 
+export interface Report {
+  title: '',
+  type: '',
+  district: '',
+  period: ''
+}
+
 export function getMarketAnalysis(district: string) {
   return request({
     url: `/analysis/market/${district}`,
@@ -32,10 +40,11 @@ export function getPriceAnalysis() {
   });
 }
 
-export function generateReport(type: string) {
+export function generateReport(data: Report) {
   return request({
-    url: `/analysis/report/${type}`,
-    method: 'post'
+    url: `/analysis/report`,
+    method: 'post',
+    data
   });
 }
 

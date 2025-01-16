@@ -8,7 +8,9 @@
       <el-table :data="userList" style="width: 100%">
         <el-table-column prop="username" label="用户名" width="180"></el-table-column>
         <el-table-column prop="role" label="角色" width="180"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
+        <el-table-column prop="phone" label="电话" width="180"></el-table-column>
+        <el-table-column label="操作" width="600">
           <template #default="scope">
             <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
@@ -32,7 +34,7 @@ const userList = ref<UserData[]>([]);
 
 const fetchUserList = async () => {
   const { data } = await getUserList();
-  userList.value = data;
+  userList.value = data.data;
 };
 
 const handleAdd = () => {

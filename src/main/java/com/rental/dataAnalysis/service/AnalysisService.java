@@ -11,7 +11,7 @@ public interface AnalysisService {
     
     PriceAnalysisDTO analyzePricing();
     
-    AnalysisReport generateReport(String type);
+    AnalysisReport generateReport(AnalysisReport report);
     
     List<AnalysisReport> getReportHistory();
     

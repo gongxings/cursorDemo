@@ -124,6 +124,7 @@ public class HouseController {
                 Map.of("title", "总楼层", "width", 100),
                 Map.of("title", "建筑年代", "width", 150),
                 Map.of("title", "房屋类型", "width", 150),
+                    Map.of("title", "房屋状态", "width", 150),
                 Map.of("title", "房屋特色", "width", 300),
                 Map.of("title", "配套设施", "width", 300),
                 Map.of("title", "房源描述", "width", 400)
@@ -133,7 +134,7 @@ public class HouseController {
             for (int i = 0; i < columns.size(); i++) {
                 Map<String, Object> column = columns.get(i);
                 // 设置列宽,并使用自适应
-                sheet.setColumnWidth(i, (int)column.get("width") * 256);
+                sheet.setColumnWidth(i, (int)column.get("width"));
 //                sheet.autoSizeColumn(i);
                 // 创建表头
                 header.createCell(i).setCellValue((String)column.get("title"));

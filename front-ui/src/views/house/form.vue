@@ -98,6 +98,16 @@
           </el-radio-group>
         </el-form-item>
 
+        <el-form-item label="房屋状态" prop="status">
+          <el-radio-group v-model="formData.status">
+            <el-radio label="已租">已租</el-radio>
+            <el-radio label="待租">待租</el-radio>
+            <el-radio label="待签约">待签约</el-radio>
+            <el-radio label="已签约">已签约</el-radio>
+            <el-radio label="空闲">空闲</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="房屋特色" prop="features">
           <el-checkbox-group v-model="formData.features">
             <el-checkbox label="精装修">精装修</el-checkbox>
@@ -196,14 +206,20 @@ const roomCountOptions = [
   { value: 1, label: '一室' },
   { value: 2, label: '两室' },
   { value: 3, label: '三室' },
-  { value: 4, label: '四室及以上' }
+  { value: 4, label: '四室' },
+  { value: 5, label: '五室' },
+  { value: 6, label: '六室' },
+  { value: 7, label: '七室' },
+  { value: 8, label: '八室' },
+  { value: 9, label: '九室' },
+  { value: 10, label: '十室及以上' }
 ];
 
 // 获取房源详情
 const fetchHouseDetail = async (id: number) => {
   try {
     const { data } = await getHouseById(id);
-    Object.assign(formData, data);
+    Object.assign(formData, data.data);
   } catch (error) {
     console.error('获取房源详情失败:', error);
     ElMessage.error('获取房源详情失败');

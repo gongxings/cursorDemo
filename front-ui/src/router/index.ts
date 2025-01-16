@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Layout from '@/layout/index.vue';
+import Home from '@/views/Home.vue';
+import Profile from '@/views/profile/index.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,37 +19,42 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard',
         name: 'Dashboard', 
         component: () => import('@/views/dashboard/index.vue'),
-        meta: { title: '首页' }
+        meta: { title: '首页', icon: 'HomeFilled' }
+      },{
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: { title: '个人中心',hidden: true, icon: 'User' }
       }
     ]
   },
   {
     path: '/house',
     component: Layout,
-    meta: { title: '房源管理', icon: 'Office' },
+    meta: { title: '房源管理', icon: 'Office', roles: ['ADMIN'] },
     children: [
       {
         path: 'list',
         name: 'HouseList',
         component: () => import('@/views/house/list.vue'),
-        meta: { title: '房源列表' }
+        meta: { title: '房源列表', icon: 'List' }
       },
       {
         path: 'add',
         name: 'HouseAdd',
         component: () => import('@/views/house/form.vue'),
-        meta: { title: '添加房源' ,hidden: true}
+        meta: { title: '添加房源', hidden: true, icon: 'Plus' }
       },
       {
         path: 'edit/:id',
         name: 'HouseEdit',
         component: () => import('@/views/house/form.vue'),
-        meta: { title: '编辑房源', hidden: true }
+        meta: { title: '编辑房源', hidden: true, icon: 'Edit' }
       },{
         path: 'view/:id',
         name: 'HouseView',
         component: () => import('@/views/house/view.vue'),
-        meta: { title: '查看房源', hidden: true }
+        meta: { title: '查看房源', hidden: true, icon: 'Eye' }
       }
     ]
   },
@@ -60,78 +67,78 @@ const routes: Array<RouteRecordRaw> = [
         path: 'market',
         name: 'MarketAnalysis',
         component: () => import('@/views/analysis/market.vue'),
-        meta: { title: '市场分析' }
+        meta: { title: '市场分析', icon: 'PieChart' }
       },
       {
         path: 'price',
         name: 'PriceAnalysis',
         component: () => import('@/views/analysis/price.vue'),
-        meta: { title: '价格分析' }
+        meta: { title: '价格分析', icon: 'TrendCharts' }
       },
       {
         path: 'reports',
         name: 'Reports',
         component: () => import('@/views/analysis/reports.vue'),
-        meta: { title: '分析报告' }
+        meta: { title: '分析报告', icon: 'Document' }
       }
     ]
   },
   {
     path: '/user',
     component: Layout,
-    meta: { title: '用户管理', icon: 'User' },
+    meta: { title: '用户管理', icon: 'User', roles: ['ADMIN'] },
     children: [
       {
         path: 'list',
         name: 'UserList',
         component: () => import('@/views/user/list.vue'),
-        meta: { title: '用户列表' }
+        meta: { title: '用户列表', icon: 'List' }
       },
       {
         path: 'add',
         name: 'UserAdd',
         component: () => import('@/views/user/form.vue'),
-        meta: { title: '添加用户', hidden: true }
+        meta: { title: '添加用户', hidden: true, icon: 'Plus' }
       },
       {
         path: 'edit/:id',
         name: 'UserEdit',
         component: () => import('@/views/user/form.vue'),
-        meta: { title: '编辑用户', hidden: true }
+        meta: { title: '编辑用户', hidden: true, icon: 'Edit' }
       },
       {
         path: 'register',
         name: 'UserRegister',
         component: () => import('@/views/user/Register.vue'),
-        meta: { title: '添加用户', hidden: true }
+        meta: { title: '添加用户', hidden: true, icon: 'UserAdd' }
       },
     ]
   },
   {
     path: '/region',
     component: Layout,
-    meta: { title: '区域管理', icon: 'Location' },
+    meta: { title: '区域管理', icon: 'Location', roles: ['ADMIN'] },
     children: [
       {
         path: 'list',
         name: 'RegionList',
         component: () => import('@/views/region/list.vue'),
-        meta: { title: '区域列表' }
+        meta: { title: '区域列表', icon: 'List' }
       },
       {
         path: 'add',
         name: 'RegionAdd',
         component: () => import('@/views/region/form.vue'),
-        meta: { title: '添加区域', hidden: true }
+        meta: { title: '添加区域', hidden: true, icon: 'Plus' }
       },
       {
         path: 'edit/:id',
         name: 'RegionEdit',
         component: () => import('@/views/region/form.vue'),
-        meta: { title: '编辑区域', hidden: true }
+        meta: { title: '编辑区域', hidden: true, icon: 'Edit' }
       }
     ]
-  }
+  },
 ];
 
 const router = createRouter({

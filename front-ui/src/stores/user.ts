@@ -11,9 +11,9 @@ export const useUserStore = defineStore('user', {
   actions: {
     async logoutAction() {
       try {
-        await logout();
         this.resetState();
         router.push('/login');
+        // await logout();
         ElMessage.success('退出登录成功');
       } catch (error) {
         console.error('退出登录失败:', error);
@@ -29,24 +29,22 @@ export const useUserStore = defineStore('user', {
       try {
         const { data } = await login(loginForm);
         if (data.success) {
-          this.token = data.token;
-          localStorage.setItem('token', data.token);
-          ElMessage.success('登录成功');
+          this.token = data.data.token;
+          localStorage.setItem('token', data.data.token);
           return { success: true, message: '登录成功' };
         } else {
           ElMessage.error(data.message);
-          return { success: false, message: data.message };
+          return { success: false, message: data.data.message };
         }
       } catch (error) {
         console.error('登录失败:', error);
-        ElMessage.error('登录失败');
         return { success: false, message: '登录失败' };
       }
     },
     async getUserInfoAction() {
       try {
         const { data } = await getUserInfo();
-        this.userInfo = data;
+        this.userInfo = data.data;
       } catch (error) {
         console.error('获取用户信息失败:', error);
       }

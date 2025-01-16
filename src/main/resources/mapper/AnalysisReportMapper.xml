@@ -6,6 +6,9 @@
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="type" property="type" />
+        <result column="status" property="status" />
+        <result column="district" property="district" />
+        <result column="period" property="period" />
         <result column="content" property="content" />
         <result column="creator_id" property="creatorId" />
         <result column="create_time" property="createTime" />
@@ -13,7 +16,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, title, type, content, creator_id, create_time, update_time
+        id, title, type, content, creator_id, create_time, update_time,status, district, period
     </sql>
 
     <select id="findAll" resultMap="BaseResultMap">
@@ -29,7 +32,7 @@
     </select>
 
     <insert id="insert" parameterType="com.rental.dataAnalysis.entity.AnalysisReport" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO analysis_report (title, type, content, creator_id)
-        VALUES (#{title}, #{type}, #{content}, #{creatorId})
+        INSERT INTO analysis_report (title, type, content, creator_id,period,district,status, create_time)
+        VALUES (#{title}, #{type}, #{content}, #{creatorId}, #{period}, #{district},#{status}, #{createTime})
     </insert>
 </mapper> 

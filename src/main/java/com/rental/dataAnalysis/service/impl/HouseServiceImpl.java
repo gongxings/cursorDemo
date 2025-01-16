@@ -77,7 +77,7 @@ public class HouseServiceImpl implements HouseService {
         
         // 设置创建者
         house.setCreatorId(userService.getCurrentUser().getId());
-        house.setStatus("AVAILABLE");
+//        house.setStatus("");
         //字符串获取年份
         house.setBuildYear(String.valueOf(DateUtils.getYearFromDateStringOffset(houseDTO.getBuildYear())));
         
@@ -143,7 +143,6 @@ public class HouseServiceImpl implements HouseService {
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Skip header row
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
-
                 House house = new House();
                 house.setTitle(row.getCell(0).getStringCellValue());
                 house.setAddress(row.getCell(1).getStringCellValue());
@@ -155,13 +154,11 @@ public class HouseServiceImpl implements HouseService {
                 house.setTotalFloor((int) row.getCell(7).getNumericCellValue());
                 house.setBuildYear(row.getCell(8).getStringCellValue());
                 house.setType(row.getCell(9).getStringCellValue());
-                house.setFeatures(objectMapper.writeValueAsString(row.getCell(10).getStringCellValue().split(",")));
-                house.setFacilities(objectMapper.writeValueAsString(row.getCell(11).getStringCellValue().split(",")));
-                house.setDescription(row.getCell(12).getStringCellValue());
-
+                house.setStatus(row.getCell(10).getStringCellValue());
+                house.setFeatures(objectMapper.writeValueAsString(row.getCell(11).getStringCellValue().split(",")));
+                house.setFacilities(objectMapper.writeValueAsString(row.getCell(12).getStringCellValue().split(",")));
+                house.setDescription(row.getCell(13).getStringCellValue());
                 house.setCreatorId(userService.getCurrentUser().getId());
-                house.setStatus("AVAILABLE");
-
                 houseMapper.insert(house);
             }
         } catch (Exception e) {
