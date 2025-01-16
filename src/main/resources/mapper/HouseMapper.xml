@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.demo.javademo.mapper.HouseMapper">
+<mapper namespace="com.rental.dataAnalysis.mapper.HouseMapper">
     
-    <resultMap id="BaseResultMap" type="com.demo.javademo.entity.House">
+    <resultMap id="BaseResultMap" type="com.rental.dataAnalysis.entity.House">
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="address" property="address" />
@@ -48,7 +48,7 @@
         ORDER BY create_time DESC
     </select>
 
-    <select id="search" parameterType="com.demo.javademo.dto.HouseQueryDTO" resultType="com.demo.javademo.entity.House">
+    <select id="search" parameterType="com.rental.dataAnalysis.dto.HouseQueryDTO" resultType="com.rental.dataAnalysis.entity.House">
         SELECT * FROM house
         <where>
             <if test="district != null and district != ''">
@@ -79,7 +79,7 @@
         ORDER BY create_time DESC
     </select>
 
-    <insert id="insert" parameterType="com.demo.javademo.entity.House" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.rental.dataAnalysis.entity.House" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO house (
             title, address, district, price, area, room_count, floor, total_floor,
             build_year, type, status, features, facilities, description, creator_id
@@ -91,7 +91,7 @@
         )
     </insert>
 
-    <update id="update" parameterType="com.demo.javademo.entity.House">
+    <update id="update" parameterType="com.rental.dataAnalysis.entity.House">
         UPDATE house
         <set>
             <if test="title != null">title = #{title},</if>

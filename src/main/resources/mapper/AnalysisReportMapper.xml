@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.demo.javademo.mapper.AnalysisReportMapper">
+<mapper namespace="com.rental.dataAnalysis.mapper.AnalysisReportMapper">
     
-    <resultMap id="BaseResultMap" type="com.demo.javademo.entity.AnalysisReport">
+    <resultMap id="BaseResultMap" type="com.rental.dataAnalysis.entity.AnalysisReport">
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="type" property="type" />
@@ -28,7 +28,7 @@
         WHERE id = #{id}
     </select>
 
-    <insert id="insert" parameterType="com.demo.javademo.entity.AnalysisReport" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.rental.dataAnalysis.entity.AnalysisReport" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO analysis_report (title, type, content, creator_id)
         VALUES (#{title}, #{type}, #{content}, #{creatorId})
     </insert>
